@@ -9,6 +9,9 @@ data class GetWeatherResponse(
     @SerializedName("main")
     val mainTempDetails : MainTempDetails,
 
+    @SerializedName("dt")
+    val datetime : Long,
+
     @SerializedName("sys")
     val sys : Sys,
 

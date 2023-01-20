@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">Weather app</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="menu_main_logout">Logout</string>
+
+    <string name="generic_confirm">Confirm</string>
+
+    <string name="main_toolbar_greeting">Hi, %1$s</string>
+
+    <string name="login_invalid_user">Invalid account</string>
+    <string name="login_invalid_user_pass">Wrong user or password</string>
+
+    <string name="current_weather_title">Current Weather</string>
+    <string name="current_weather_location">%1$s, %2$s</string>
+    <string name="current_weather_temp">%1$s\u00B0</string>
+
+    <string name="history_title">History</string>
+
+
+    <string name="celsius">\u00B0</string>
+
 </resources>

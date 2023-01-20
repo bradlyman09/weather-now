@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.example.playground.R
 import com.example.playground.databinding.ActivityOnboardingBinding
 import com.example.playground.ui.main.MainActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +22,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         initViews()
         initObservables()
+        checkAutoLogin()
     }
 
     private fun initViews(){
@@ -35,9 +38,22 @@ class OnboardingActivity : AppCompatActivity() {
             SignupFragment.newInstance().show(supportFragmentManager, "")
         }
 
-        viewModel.signupComplete.observe(this){
-            startActivity(Intent(this@OnboardingActivity, MainActivity::class.java))
-            finish()
+        viewModel.validLogin.observe(this){
+            it?.let {
+                startActivity(Intent(this@OnboardingActivity, MainActivity::class.java))
+                finish()
+            }?:run{
+                MaterialAlertDialogBuilder(this@OnboardingActivity)
+                    .setTitle(getString(R.string.login_invalid_user))
+                    .setMessage(getString(R.string.login_invalid_user_pass))
+                    .setPositiveButton(getString(R.string.generic_confirm)){ _, _->
+                    }
+                    .show()
+            }
         }
+    }
+
+    private fun checkAutoLogin(){
+        viewModel.checkIfUserIsLoggedIn()
     }
 }

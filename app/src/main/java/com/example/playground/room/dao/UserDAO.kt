@@ -15,7 +15,7 @@ interface UserDAO {
             "WHERE username = :username " +
             "AND password = :password " +
             "LIMIT 1")
-    suspend fun getUser(username : String, password : String) : UserEntity
+    suspend fun getUser(username : String, password : String) : UserEntity?
 
 
 }

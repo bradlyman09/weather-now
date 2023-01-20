@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.playground.room.data.UserEntity
 import com.example.playground.room.domain.CreateUserUseCase
 import com.example.playground.room.domain.LoginUserUseCase
+import com.example.playground.sharedprefs.domain.GetUserSharedPrefUseCase
+import com.example.playground.sharedprefs.domain.SetUserSharedPrefUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     val createUserUseCase: CreateUserUseCase,
-    val loginUserUseCase: LoginUserUseCase
+    val loginUserUseCase: LoginUserUseCase,
+    val setUserSharedPrefUseCase: SetUserSharedPrefUseCase,
+    val getUserSharedPrefUseCase: GetUserSharedPrefUseCase
 ) : ViewModel(){
 
     private var username = ""
@@ -30,11 +34,8 @@ class OnboardingViewModel @Inject constructor(
     private val _validPass = MutableLiveData<Boolean>()
     val validPass : LiveData<Boolean> = _validPass
 
-    private val _signupComplete = MutableLiveData<Boolean>()
-    val signupComplete : LiveData<Boolean> = _signupComplete
-
-    private val _validLogin = MutableLiveData<Boolean>()
-    val validLogin : LiveData<Boolean> = _validLogin
+    private val _validLogin = MutableLiveData<UserEntity?>()
+    val validLogin : LiveData<UserEntity?> = _validLogin
 
     fun signUp(){
         _showSignUpBottomSheet.postValue(true)
@@ -67,24 +68,28 @@ class OnboardingViewModel @Inject constructor(
                 username = username,
                 pass = pass
             ))
-        }
 
-        _signupComplete.postValue(true)
+            validateLogin(username, pass)
+        }
     }
 
     fun validateLogin(tempUsername : String, tempPass : String){
         viewModelScope.launch {
             val user = loginUserUseCase(tempUsername, tempPass)
-//            val isValid = when{
-//                tempUsername.isEmpty() || tempPass.isEmpty() -> false
-//                loginUserUseCase(tempUsername, tempPass) != null-> {
-//
-//                    true
-//                }
-//            }
-            println(user)
+
+            user?.let {
+                setUserSharedPrefUseCase(it)
+            }
+
+            _validLogin.postValue(user)
         }
-//
-//        _validLogin.postValue(isValid)
+    }
+
+    fun checkIfUserIsLoggedIn(){
+        val userDetails = getUserSharedPrefUseCase()
+
+        if (userDetails.userId != 0){
+            _validLogin.postValue(userDetails)
+        }
     }
 }

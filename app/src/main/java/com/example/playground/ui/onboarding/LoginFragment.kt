@@ -39,14 +39,14 @@ class LoginFragment : Fragment() {
 
         binding.btnLogin.setOnClickListener {
             viewModel.validateLogin(
-                tempUsername = binding.etUser.toString().trim(),
-                tempPass = binding.etPass.toString().trim()
+                tempUsername = binding.etUser.text.toString().trim(),
+                tempPass = binding.etPass.text.toString().trim()
             )
         }
     }
 
     private fun initObservables(){
-
+        //not much to do for now
     }
 
     companion object {
