@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playground.BuildConfig
 import com.example.playground.network.data.response.get_weather.GetWeatherResponse
 import com.example.playground.network.domain.WeatherByCityUseCase
 import com.example.playground.room.data.UserEntity
@@ -45,7 +46,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val queryMap = HashMap<String, String>()
             queryMap["q"] = "Manila"
-            queryMap["appid"] = "f1972c30f01df13f61f0325dbbcbabea"
+            queryMap["appid"] = BuildConfig.APP_ID
             queryMap["units"] = "metric"
 
             weatherByCityUseCase(queryMap)?.let {

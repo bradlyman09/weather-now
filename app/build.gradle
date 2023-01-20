@@ -21,7 +21,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "APP_ID", appid
+        }
+
         release {
+            buildConfigField "String", "APP_ID", '"f1972c30f01df13f61f0325dbbcbabea"'
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
